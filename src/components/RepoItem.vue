@@ -9,14 +9,36 @@
         <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
-        <v-btn text icon :color="actionBtnColor" rounded v-on:click="onClickBookmarkAction">
-          <v-icon>{{ actionBtnIcon }}</v-icon>
-        </v-btn>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              v-on="on"
+              text
+              icon
+              rounded
+              :color="actionBtnColor"
+              @click="onClickBookmarkAction"
+            >
+              <v-icon>{{ actionBtnIcon }}</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ isBookmarked ? 'Remove bookmark' : 'Bookmark' }}</span>
+        </v-tooltip>
       </v-list-item-action>
     </v-list-item>
     <v-card-actions>
-      <RepoChip color="warning" icon="mdi-star" :count="item.starsCount" />&nbsp;
-      <RepoChip color="success" icon="mdi-directions-fork" :count="item.forksCount" />
+      <RepoChip
+        color="warning"
+        icon="mdi-star"
+        :count="item.starsCount"
+        :tooltip="`Starred ${item.starsCount} times`"
+      />
+      <RepoChip
+        color="success"
+        icon="mdi-directions-fork"
+        :count="item.forksCount"
+        :tooltip="`Forked ${item.forksCount} times`"
+      />
     </v-card-actions>
   </v-card>
 </template>
@@ -37,19 +59,17 @@ export default {
       return this.$store.getters.getRepoById(this.id);
     },
     actionBtnIcon() {
-      return !this.isBookmarked
-        ? "mdi-bookmark-plus"
-        : "mdi-bookmark-remove";
+      return !this.isBookmarked ? "mdi-bookmark-plus" : "mdi-bookmark-remove";
     },
     actionBtnColor() {
-      return !this.isBookmarked
-        ? "info"
-        : "error";
+      return !this.isBookmarked ? "info" : "error";
     }
   },
   methods: {
     onClickBookmarkAction: function() {
-      let bookmarkAction = !this.isBookmarked ? 'addBookmark' : 'removeBookmark';
+      let bookmarkAction = !this.isBookmarked
+        ? "addBookmark"
+        : "removeBookmark";
       this.$store.commit(bookmarkAction, { bookmarkId: this.id });
     }
   }
