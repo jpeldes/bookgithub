@@ -8,28 +8,16 @@
         prepend-icon="mdi-magnify"
         label="Search from repositories"
         autocomplete="pleasedont"
+        :error-messages="errorMessage"
       />
     </div>
     <div>
-      <span v-if="q" class="overline">Searching for {{ q }}</span>
+      <span v-if="q.length > 0 && errorMessage.length === 0" class="overline">Searching for {{ q }}</span>
     </div>
     <div>
       <v-row>
-        <v-col v-for="item in resultItems" :key="item.id" cols="12">
-          <v-card>
-            <v-list-item three-line>
-              <v-list-item-avatar>
-                <v-img :src="item.owner.avatar_url" />
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.full_name }}</v-list-item-title>
-                <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn color="info" rounded><v-icon>mdi-bookmark</v-icon></v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-card>
+        <v-col v-for="id in resultItemIds" :key="id" cols="12">
+          <RepoItem :id="id" />
         </v-col>
       </v-row>
     </div>
@@ -38,35 +26,61 @@
 
 <script>
 import ViewHeading from "@/components/ViewHeading.vue";
+import RepoItem from "@/components/RepoItem.vue";
 import api from "@/api/api.js";
 
 export default {
   data: () => ({
     q: "",
-    resultItems: [],
-    debounceId: null
+    errorMessage: "",
+    debounceId: null,
+    resultItemIds: []
   }),
   components: {
-    ViewHeading
+    ViewHeading,
+    RepoItem
   },
   methods: {
     onSearchInput: function() {
-      if (this.q) {
-        this.goSearchRepos();
-      }
-    },
-    goSearchRepos: function() {
+      this.errorMessage = "";
       if (this.debounceId) {
         clearTimeout(this.debounceId);
       }
-      this.debounceId = setTimeout(() => {
-        if (this.q) {
-          api.searchRepos(this.q).then(json => {
-            this.resultItems = json.items;
-          });
+
+      this.debounceId = setTimeout((query) => {
+        let cachedQuery = this.$store.getters.getRepoIdsByQuery(query);
+        if (Array.isArray(cachedQuery)) {
+          this.resultItemIds = cachedQuery;
+        } else if (query) {
+          this.goSearchRepos(query);
+        } else {
+          this.resultItemIds = [];
         }
+
         this.debounceId = null;
-      }, 300);
+      }, 500, this.q);
+    },
+    goSearchRepos: function(query) {
+      if (query) {
+        api
+          .searchRepos(query)
+          .then(json => {
+            let { items } = json;
+            let ids = items.map(item => item.id);
+            this.$store.commit("saveRepoSearch", {
+              query,
+              ids,
+              items
+            });
+
+            this.resultItemIds = ids;
+          })
+          .catch(err => {
+            console.error(err);
+            this.errorMessage = err.message;
+            this.resultItemIds = [];
+          });
+      }
     }
   }
 };
