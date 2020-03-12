@@ -4,7 +4,7 @@
     <div>
       <v-row>
         <v-col v-for="id in bookmarkIds" :key="id" cols="12">
-          <RepoItem :id="id" bookmarkAction="removeBookmark" />
+          <RepoItem :id="id" />
         </v-col>
       </v-row>
     </div>

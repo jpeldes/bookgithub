@@ -30,23 +30,27 @@ export default {
     RepoChip
   },
   computed: {
+    isBookmarked() {
+      return this.$store.getters.isBookmarked(this.id);
+    },
     item() {
       return this.$store.getters.getRepoById(this.id);
     },
     actionBtnIcon() {
-      return this.bookmarkAction === "addBookmark"
+      return !this.isBookmarked
         ? "mdi-bookmark-plus"
         : "mdi-bookmark-remove";
     },
     actionBtnColor() {
-      return this.bookmarkAction === "addBookmark"
+      return !this.isBookmarked
         ? "info"
         : "error";
     }
   },
   methods: {
     onClickBookmarkAction: function() {
-      this.$store.commit(this.bookmarkAction, { bookmarkId: this.id });
+      let bookmarkAction = !this.isBookmarked ? 'addBookmark' : 'removeBookmark';
+      this.$store.commit(bookmarkAction, { bookmarkId: this.id });
     }
   }
 };

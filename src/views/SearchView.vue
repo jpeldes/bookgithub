@@ -14,7 +14,7 @@
     <div>
       <v-row>
         <v-col v-for="id in resultItemIds" :key="id" cols="12">
-          <RepoItem :id="id" bookmarkAction="addBookmark" />
+          <RepoItem :id="id" />
         </v-col>
       </v-row>
     </div>
