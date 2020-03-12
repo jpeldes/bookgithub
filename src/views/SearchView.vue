@@ -5,19 +5,16 @@
       <v-text-field
         v-model="q"
         v-on:input="onSearchInput"
-        prepend-icon="mdi-magnify"
+        :prepend-icon="searchIcon"
         label="Search from repositories"
         autocomplete="pleasedont"
         :error-messages="errorMessage"
       />
     </div>
     <div>
-      <span v-if="q.length > 0 && errorMessage.length === 0" class="overline">Searching for {{ q }}</span>
-    </div>
-    <div>
       <v-row>
         <v-col v-for="id in resultItemIds" :key="id" cols="12">
-          <RepoItem :id="id" />
+          <RepoItem :id="id" bookmarkAction="addBookmark" />
         </v-col>
       </v-row>
     </div>
@@ -40,6 +37,11 @@ export default {
     ViewHeading,
     RepoItem
   },
+  computed: {
+    searchIcon() {
+      return this.debounceId === null ? "mdi-magnify" : "mdi-spin mdi-loading";
+    }
+  },
   methods: {
     onSearchInput: function() {
       this.errorMessage = "";
@@ -47,18 +49,22 @@ export default {
         clearTimeout(this.debounceId);
       }
 
-      this.debounceId = setTimeout((query) => {
-        let cachedQuery = this.$store.getters.getRepoIdsByQuery(query);
-        if (Array.isArray(cachedQuery)) {
-          this.resultItemIds = cachedQuery;
-        } else if (query) {
-          this.goSearchRepos(query);
-        } else {
-          this.resultItemIds = [];
-        }
+      this.debounceId = setTimeout(
+        query => {
+          let cachedQuery = this.$store.getters.getRepoIdsByQuery(query);
+          if (Array.isArray(cachedQuery)) {
+            this.resultItemIds = cachedQuery;
+          } else if (query) {
+            this.goSearchRepos(query);
+          } else {
+            this.resultItemIds = [];
+          }
 
-        this.debounceId = null;
-      }, 500, this.q);
+          this.debounceId = null;
+        },
+        500,
+        this.q
+      );
     },
     goSearchRepos: function(query) {
       if (query) {

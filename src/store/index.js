@@ -34,6 +34,13 @@ export default new Vuex.Store({
       if (state.bookmarks.ids.indexOf(id) < 0) {
         state.bookmarks.ids = [id, ...state.bookmarks.ids]
       }
+    },
+    removeBookmark(state, payload) {
+      let id = payload.bookmarkId;
+      let idx = state.bookmarks.ids.indexOf(id);
+      if (idx >= 0) {
+        state.bookmarks.ids.splice(idx, 1);
+      }
     }
   },
   actions: {},
