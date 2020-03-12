@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import vuexLocalStorage from '@/plugins/vuexLocalStorage';
 
 import RepoClass from "@/models/RepoClass";
 
@@ -58,5 +59,6 @@ export default new Vuex.Store({
     getRepoById: state => id => {
       return state.repos.byId[id];
     }
-  }
+  },
+  plugins: [vuexLocalStorage.plugin]
 });
