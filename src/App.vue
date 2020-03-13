@@ -2,7 +2,9 @@
   <v-app>
     <AppBar />
     <v-content>
-      <router-view />
+      <v-scroll-x-transition hide-on-leave>
+        <router-view />
+      </v-scroll-x-transition>
     </v-content>
   </v-app>
 </template>
