@@ -4,7 +4,6 @@
     <div>
       <v-text-field
         v-model="q"
-        v-on:input="onSearchInput"
         :prepend-icon="searchIcon"
         label="Search from repositories"
         autocomplete="pleasedont"
@@ -28,7 +27,6 @@ import api from "@/api/api.js";
 
 export default {
   data: () => ({
-    q: "",
     errorMessage: "",
     debounceId: null,
     resultItemIds: []
@@ -38,12 +36,20 @@ export default {
     RepoCard
   },
   computed: {
+    q: {
+      get() {
+        return this.$store.getters.getSearchQuery;
+      },
+      set(q) {
+        this.$store.commit("updateSearchQuery", { q });
+      }
+    },
     searchIcon() {
       return this.debounceId === null ? "mdi-magnify" : "mdi-spin mdi-loading";
     }
   },
-  methods: {
-    onSearchInput: function() {
+  watch: {
+    q(newQuery) {
       this.errorMessage = "";
       if (this.debounceId) {
         clearTimeout(this.debounceId);
@@ -63,9 +69,11 @@ export default {
           this.debounceId = null;
         },
         500,
-        this.q
+        newQuery
       );
-    },
+    }
+  },
+  methods: {
     goSearchRepos: function(query) {
       if (query) {
         api

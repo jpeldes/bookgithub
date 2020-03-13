@@ -9,6 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     search: {
+      query: '',
       byQuery: {}
     },
     repos: {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    updateSearchQuery(state, payload) {
+      state.search.query = payload.q;
+    },
     saveRepoSearch(state, payload) {
       let { query, items, ids } = payload;
 
@@ -47,11 +51,17 @@ export default new Vuex.Store({
   actions: {},
   modules: {},
   getters: {
+    getSearchQuery: state => {
+      return state.search.query;
+    },
     isBookmarked: state => id => {
       return state.bookmarks.ids.indexOf(id) >= 0;
     },
     bookmarkIds: state => {
       return state.bookmarks.ids;
+    },
+    bookmarkCount: state => {
+      return state.bookmarks.ids.length;
     },
     getRepoIdsByQuery: state => query => {
       return state.search.byQuery[query];
