@@ -79,8 +79,13 @@ export default {
               items
             });
 
-            this.resultItemIds = ids;
             this.errorMessage = "";
+
+            // Fix race condition
+            // Better fix would be to cancel apicall
+            if (this.q === query) {
+              this.resultItemIds = ids;
+            }
           })
           .catch(err => {
             if (err.message.indexOf("API rate limit exceeded") >= 0) {
