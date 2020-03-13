@@ -6,14 +6,7 @@
       </v-btn>
     </v-toolbar-title>
     <v-spacer />
-    <v-text-field
-      @focus="onSearchFocus"
-      flat
-      solo-inverted
-      hide-details
-      prepend-inner-icon="mdi-magnify"
-      label="Search"
-    />
+    <RepoSearchInput />
     <v-spacer />
     <v-btn icon to="/bookmarks" class="ml-2 mr-2">
       <v-badge color="blue" :content="bookmarkCount" :value="bookmarkCount">
@@ -23,16 +16,14 @@
   </v-app-bar>
 </template>
 <script>
-import router from "@/router";
+import RepoSearchInput from "@/components/RepoSearchInput.vue";
 export default {
+  components: {
+    RepoSearchInput
+  },
   computed: {
     bookmarkCount() {
       return this.$store.getters.bookmarkCount;
-    }
-  },
-  methods: {
-    onSearchFocus: () => {
-      router.push("/search").catch(() => {});
     }
   }
 };

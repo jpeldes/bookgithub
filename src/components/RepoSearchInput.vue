@@ -1,15 +1,20 @@
 <template>
   <v-text-field
     v-model="q"
-    :prepend-icon="searchIcon"
-    label="Search from repositories"
+    @focus="onSearchFocus"
     autocomplete="pleasedont"
     :error-messages="errorMessage"
+    flat
+    solo-inverted
+    hide-details
+    :prepend-inner-icon="searchIcon"
+    label="Search from repositories"
   />
 </template>
 
 <script>
 import _ from "lodash";
+import router from "@/router";
 
 export default {
   computed: {
@@ -43,8 +48,12 @@ export default {
       } else {
         this.$store.commit("clearSearchResults");
         this.$store.commit("isSearching", { isSearching: false });
+        this.$store.commit("hasSearchFoundZero", { hasSearchFoundZero: false });
       }
-    }, 500)
+    }, 500),
+    onSearchFocus: () => {
+      router.push("/search").catch(() => {});
+    }
   }
 };
 </script>

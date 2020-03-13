@@ -11,6 +11,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     search: {
+      hasSearchFoundZero: false,
       isSearching: false,
       query: "",
       errorMessage: "",
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     isSearching(state, payload) {
       state.search.isSearching = payload.isSearching;
+    },
+    hasSearchFoundZero(state, payload) {
+      state.search.hasSearchFoundZero = payload.hasSearchFoundZero;
     },
     updateSearchQuery(state, payload) {
       state.search.query = payload.q;
@@ -64,6 +68,7 @@ export default new Vuex.Store({
   actions: {
     searchRepos({ commit, state }, { query }) {
       commit("isSearching", { isSearching: true });
+      commit("hasSearchFoundZero", { hasSearchFoundZero: false });
       if (state.search.errorMessage !== "") {
         commit("updateSearchError", { errorMessage: "" });
       }
@@ -78,6 +83,7 @@ export default new Vuex.Store({
               ids,
               items
             });
+            commit("hasSearchFoundZero", { hasSearchFoundZero: ids.length === 0 });
           } else {
             // Avoid query mismatch
             // Better to cancel API call, though.

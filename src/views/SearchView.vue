@@ -1,10 +1,40 @@
 <template>
   <v-container>
-    <ViewHeading heading="Search" />
     <div>
-      <RepoSearchInput />
-    </div>
-    <div>
+      <v-row v-if="errorMessage">
+        <v-col cols="6" offset="3">
+          <v-alert type="error" text>{{ errorMessage }}</v-alert>
+        </v-col>
+      </v-row>
+
+      <v-row
+        v-if="!errorMessage && isSearchQueryEmpty && !isSearching && resultItemIds.length === 0"
+        justify="center"
+        class="text-center"
+      >
+        <v-col>
+          <div class="mb-3">
+            <v-icon x-large color="green lighten-2">mdi-emoticon-happy-outline</v-icon>
+          </div>
+          <div>
+            <h1 class="headline font-weight-light text-uppercase">Type something</h1>
+          </div>
+          <div class="subtitle-1 text--secondary">Don't be shy…</div>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="hasSearchFoundZero" justify="center" class="text-center">
+        <v-col>
+          <div class="mb-3">
+            <v-icon x-large color="green lighten-2">mdi-ninja</v-icon>
+          </div>
+          <div>
+            <h1 class="headline font-weight-light text-uppercase">No Matches Found</h1>
+          </div>
+          <div class="subtitle-1 text--secondary">Please try another search.</div>
+        </v-col>
+      </v-row>
+
       <v-row>
         <v-col v-for="id in resultItemIds" :key="id" cols="12">
           <RepoCard :id="id" />
@@ -15,17 +45,25 @@
 </template>
 
 <script>
-import ViewHeading from "@/components/ViewHeading.vue";
 import RepoCard from "@/components/RepoCard.vue";
-import RepoSearchInput from "@/components/RepoSearchInput.vue";
 
 export default {
   components: {
-    ViewHeading,
-    RepoCard,
-    RepoSearchInput
+    RepoCard
   },
   computed: {
+    isSearchQueryEmpty() {
+      return this.$store.getters.getSearchQuery === "";
+    },
+    hasSearchFoundZero() {
+      return this.$store.state.search.hasSearchFoundZero;
+    },
+    isSearching() {
+      return this.$store.state.search.isSearching;
+    },
+    errorMessage() {
+      return this.$store.state.search.errorMessage;
+    },
     resultItemIds() {
       return this.$store.getters.getSearchResultIds;
     }
