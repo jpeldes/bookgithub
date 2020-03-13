@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <ViewHeading heading="Search" />
     <div>
       <v-text-field
@@ -18,7 +18,7 @@
         </v-col>
       </v-row>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <ViewHeading heading="Bookmarks" />
     <div>
       <v-row>
@@ -8,7 +8,7 @@
         </v-col>
       </v-row>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>

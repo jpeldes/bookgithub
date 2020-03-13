@@ -1,25 +1,21 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="12" sm="6">
-        <SearchView />
-      </v-col>
-      <v-col cols="12" sm="6">
-        <BookmarkView />
-      </v-col>
-    </v-row>
+    <h1 class="text-center headline mt-5">
+      Welcome to
+      <span class="font-weight-regular">bookgithub</span>
+    </h1>
   </v-container>
 </template>
 
 <script>
-import SearchView from "@/views/SearchView.vue";
-import BookmarkView from "@/views/BookmarkView.vue";
+// import SearchView from "@/views/SearchView.vue";
+// import BookmarkView from "@/views/BookmarkView.vue";
 
 export default {
   name: "Home",
   components: {
-    SearchView,
-    BookmarkView
+    // SearchView,
+    // BookmarkView
   }
 };
 </script>
