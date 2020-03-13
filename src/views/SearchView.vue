@@ -80,10 +80,16 @@ export default {
             });
 
             this.resultItemIds = ids;
+            this.errorMessage = "";
           })
           .catch(err => {
-            console.error(err);
-            this.errorMessage = err.message;
+            if (err.message.indexOf("API rate limit exceeded") >= 0) {
+              this.errorMessage =
+                "Too many searches recently. Please try again in a minute.";
+            } else {
+              console.error(err);
+              this.errorMessage = "An error occurred. Please try again later";
+            }
             this.resultItemIds = [];
           });
       }
