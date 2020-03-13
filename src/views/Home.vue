@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <ViewHeading heading="Welcome to bookgithub" />
-    <v-row justify="center">
+    <v-row justify="center" class="mt-5">
       <v-col sm="3">
         <HomeNavItem
           title="Search"

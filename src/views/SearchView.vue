@@ -17,7 +17,7 @@
             <v-icon x-large color="green lighten-2">mdi-emoticon-happy-outline</v-icon>
           </div>
           <div>
-            <h1 class="headline font-weight-light text-uppercase">Type something</h1>
+            <h1 class="headline font-weight-light">Type something</h1>
           </div>
           <div class="subtitle-1 text--secondary">Don't be shy…</div>
         </v-col>
@@ -29,7 +29,7 @@
             <v-icon x-large color="green lighten-2">mdi-ninja</v-icon>
           </div>
           <div>
-            <h1 class="headline font-weight-light text-uppercase">No Matches Found</h1>
+            <h1 class="headline font-weight-light">No matches found</h1>
           </div>
           <div class="subtitle-1 text--secondary">Please try another search.</div>
         </v-col>
