@@ -1,6 +1,14 @@
 const API_BASE = "https://api.github.com";
 
-const jsonGet = url => fetch(url).then(response => response.json());
+const jsonGet = url =>
+  fetch(url).then(async response => {
+    let json = await response.json();
+    if (response.ok) {
+      return Promise.resolve(json);
+    } else {
+      return Promise.reject(json);
+    }
+  });
 
 export default {
   searchRepos: q => {
