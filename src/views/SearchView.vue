@@ -2,13 +2,7 @@
   <v-container>
     <ViewHeading heading="Search" />
     <div>
-      <v-text-field
-        v-model="q"
-        :prepend-icon="searchIcon"
-        label="Search from repositories"
-        autocomplete="pleasedont"
-        :error-messages="errorMessage"
-      />
+      <RepoSearchInput />
     </div>
     <div>
       <v-row>
@@ -23,89 +17,17 @@
 <script>
 import ViewHeading from "@/components/ViewHeading.vue";
 import RepoCard from "@/components/RepoCard.vue";
-import api from "@/api/api.js";
+import RepoSearchInput from "@/components/RepoSearchInput.vue";
 
 export default {
-  data: () => ({
-    errorMessage: "",
-    debounceId: null,
-    resultItemIds: []
-  }),
   components: {
     ViewHeading,
-    RepoCard
+    RepoCard,
+    RepoSearchInput
   },
   computed: {
-    q: {
-      get() {
-        return this.$store.getters.getSearchQuery;
-      },
-      set(q) {
-        this.$store.commit("updateSearchQuery", { q });
-      }
-    },
-    searchIcon() {
-      return this.debounceId === null ? "mdi-magnify" : "mdi-spin mdi-loading";
-    }
-  },
-  watch: {
-    q(newQuery) {
-      this.errorMessage = "";
-      if (this.debounceId) {
-        clearTimeout(this.debounceId);
-      }
-
-      this.debounceId = setTimeout(
-        query => {
-          let cachedQuery = this.$store.getters.getRepoIdsByQuery(query);
-          if (Array.isArray(cachedQuery)) {
-            this.resultItemIds = cachedQuery;
-          } else if (query) {
-            this.goSearchRepos(query);
-          } else {
-            this.resultItemIds = [];
-          }
-
-          this.debounceId = null;
-        },
-        500,
-        newQuery
-      );
-    }
-  },
-  methods: {
-    goSearchRepos: function(query) {
-      if (query) {
-        api
-          .searchRepos(query)
-          .then(json => {
-            let { items } = json;
-            let ids = items.map(item => item.id);
-            this.$store.commit("saveRepoSearch", {
-              query,
-              ids,
-              items
-            });
-
-            this.errorMessage = "";
-
-            // Fix race condition
-            // Better fix would be to cancel apicall
-            if (this.q === query) {
-              this.resultItemIds = ids;
-            }
-          })
-          .catch(err => {
-            if (err.message.indexOf("API rate limit exceeded") >= 0) {
-              this.errorMessage =
-                "Too many searches recently. Please try again in a minute.";
-            } else {
-              console.error(err);
-              this.errorMessage = "An error occurred. Please try again later";
-            }
-            this.resultItemIds = [];
-          });
-      }
+    resultItemIds() {
+      return this.$store.getters.getSearchResultIds;
     }
   }
 };

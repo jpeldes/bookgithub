@@ -6,7 +6,7 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>
-          <a text color="primary" target="_blank" :href="item.githubLink">{{ item.name }}</a>
+          <a text color="primary" target="_blank" :href="item.githubLink">{{ item.fullName }}</a>
         </v-list-item-title>
         <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
       </v-list-item-content>

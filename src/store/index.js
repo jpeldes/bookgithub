@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import vuexLocalStorage from '@/plugins/vuexLocalStorage';
+import vuexLocalStorage from "@/plugins/vuexLocalStorage";
+
+import api from "@/api/api.js";
 
 import RepoClass from "@/models/RepoClass";
 
@@ -9,8 +11,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     search: {
-      query: '',
-      byQuery: {}
+      isSearching: false,
+      query: "",
+      errorMessage: "",
+      resultIds: []
     },
     repos: {
       byId: {}
@@ -20,11 +24,20 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    clearSearchResults(state) {
+      state.search.resultIds = [];
+    },
+    isSearching(state, payload) {
+      state.search.isSearching = payload.isSearching;
+    },
     updateSearchQuery(state, payload) {
       state.search.query = payload.q;
     },
+    updateSearchError(state, payload) {
+      state.search.errorMessage = payload.errorMessage;
+    },
     saveRepoSearch(state, payload) {
-      let { query, items, ids } = payload;
+      let { items, ids } = payload;
 
       // Save repo data
       items.forEach(item => {
@@ -32,12 +45,12 @@ export default new Vuex.Store({
       });
 
       // Save query
-      state.search.byQuery[query] = ids;
+      state.search.resultIds = ids;
     },
     addBookmark(state, payload) {
       let id = payload.bookmarkId;
       if (state.bookmarks.ids.indexOf(id) < 0) {
-        state.bookmarks.ids = [id, ...state.bookmarks.ids]
+        state.bookmarks.ids = [id, ...state.bookmarks.ids];
       }
     },
     removeBookmark(state, payload) {
@@ -48,7 +61,47 @@ export default new Vuex.Store({
       }
     }
   },
-  actions: {},
+  actions: {
+    searchRepos({ commit, state }, { query }) {
+      commit("isSearching", { isSearching: true });
+      if (state.search.errorMessage !== "") {
+        commit("updateSearchError", { errorMessage: "" });
+      }
+
+      return api
+        .searchRepos(query)
+        .then(json => {
+          let { items } = json;
+          let ids = items.map(item => item.id);
+          if (state.search.query === query) {
+            commit("saveRepoSearch", {
+              ids,
+              items
+            });
+          } else {
+            // Avoid query mismatch
+            // Better to cancel API call, though.
+          }
+        })
+        .catch(err => {
+          let errorMessage = "";
+          if (err.message.indexOf("API rate limit exceeded") >= 0) {
+            errorMessage =
+              "Too many searches recently. Please try again in a minute.";
+          } else {
+            console.error(err);
+            errorMessage = "An error occurred. Please try again later";
+          }
+          if (state.search.errorMessage !== errorMessage) {
+            commit("updateSearchError", { errorMessage });
+          }
+          commit("clearSearchResults");
+        })
+        .finally(() => {
+          commit("isSearching", { isSearching: false });
+        });
+    }
+  },
   modules: {},
   getters: {
     getSearchQuery: state => {
@@ -63,8 +116,8 @@ export default new Vuex.Store({
     bookmarkCount: state => {
       return state.bookmarks.ids.length;
     },
-    getRepoIdsByQuery: state => query => {
-      return state.search.byQuery[query];
+    getSearchResultIds: state => {
+      return state.search.resultIds;
     },
     getRepoById: state => id => {
       return state.repos.byId[id];
