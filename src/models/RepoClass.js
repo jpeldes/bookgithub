@@ -6,6 +6,7 @@ class RepoClass {
     this.description = data.description;
     this.starsCount = data.stargazers_count;
     this.forksCount = data.forks_count;
+    this.githubLink = data.html_url;
 
     let owner = data.owner || {};
 

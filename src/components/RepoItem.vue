@@ -5,7 +5,9 @@
         <v-img :src="item.authorAvatarUrl" />
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title>{{ item.name }}</v-list-item-title>
+        <v-list-item-title>
+          <a text color="primary" target="_blank" :href="item.githubLink">{{ item.name }}</a>
+        </v-list-item-title>
         <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
