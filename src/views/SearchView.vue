@@ -14,7 +14,7 @@
     <div>
       <v-row>
         <v-col v-for="id in resultItemIds" :key="id" cols="12">
-          <RepoItem :id="id" />
+          <RepoCard :id="id" />
         </v-col>
       </v-row>
     </div>
@@ -23,7 +23,7 @@
 
 <script>
 import ViewHeading from "@/components/ViewHeading.vue";
-import RepoItem from "@/components/RepoItem.vue";
+import RepoCard from "@/components/RepoCard.vue";
 import api from "@/api/api.js";
 
 export default {
@@ -35,7 +35,7 @@ export default {
   }),
   components: {
     ViewHeading,
-    RepoItem
+    RepoCard
   },
   computed: {
     searchIcon() {

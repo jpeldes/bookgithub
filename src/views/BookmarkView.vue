@@ -4,7 +4,7 @@
     <div>
       <v-row>
         <v-col v-for="id in bookmarkIds" :key="id" cols="12">
-          <RepoItem :id="id" />
+          <RepoCard :id="id" />
         </v-col>
       </v-row>
     </div>
@@ -13,9 +13,9 @@
 
 <script>
 import ViewHeading from "@/components/ViewHeading.vue";
-import RepoItem from "@/components/RepoItem.vue";
+import RepoCard from "@/components/RepoCard.vue";
 export default {
-  components: { ViewHeading, RepoItem },
+  components: { ViewHeading, RepoCard },
   computed: {
     bookmarkIds() {
       return this.$store.getters.bookmarkIds;
