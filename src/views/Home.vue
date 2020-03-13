@@ -1,11 +1,6 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <h1 class="text-center headline mt-5 mb-3">
-        Welcome to
-        <span class="font-weight-regular">bookgithub</span>
-      </h1>
-    </v-row>
+  <v-container>
+    <ViewHeading heading="Welcome to bookgithub" />
     <v-row justify="center">
       <v-col sm="3">
         <HomeNavItem
@@ -27,10 +22,12 @@
 
 <script>
 import HomeNavItem from "@/components/HomeNavItem";
+import ViewHeading from "@/components/ViewHeading.vue";
 
 export default {
   name: "Home",
   components: {
+    ViewHeading,
     HomeNavItem
   }
 };
