@@ -35,21 +35,17 @@
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col v-for="id in resultItemIds" :key="id" cols="12">
-          <RepoCard :id="id" />
-        </v-col>
-      </v-row>
+      <RepoCardList :repoIds="resultItemIds" />
     </div>
   </v-container>
 </template>
 
 <script>
-import RepoCard from "@/components/RepoCard.vue";
+import RepoCardList from "@/components/RepoCardList.vue";
 
 export default {
   components: {
-    RepoCard
+    RepoCardList
   },
   computed: {
     isSearchQueryEmpty() {

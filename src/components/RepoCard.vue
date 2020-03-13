@@ -13,12 +13,7 @@
       <v-list-item-action>
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn
-              v-on="on"
-              fab
-              :color="actionBtnColor"
-              @click="onClickBookmarkAction"
-            >
+            <v-btn v-on="on" fab :color="actionBtnColor" @click="onClickBookmarkAction">
               <v-icon>{{ actionBtnIcon }}</v-icon>
             </v-btn>
           </template>
@@ -47,7 +42,7 @@
 import RepoChip from "@/components/RepoChip.vue";
 
 export default {
-  props: ["id", "bookmarkAction"],
+  props: ["id", "showSnackbar"],
   components: {
     RepoChip
   },
@@ -67,10 +62,21 @@ export default {
   },
   methods: {
     onClickBookmarkAction: function() {
-      let bookmarkAction = !this.isBookmarked
-        ? "addBookmark"
-        : "removeBookmark";
-      this.$store.commit(bookmarkAction, { bookmarkId: this.id });
+      if (this.isBookmarked) {
+        this.showSnackbar({
+          bookmarkId: this.id,
+          undoAction: "addBookmark",
+          snackbarText: `Bookmark removed: ${this.item.fullName}`
+        });
+        this.$store.commit("removeBookmark", { bookmarkId: this.id });
+      } else {
+        this.showSnackbar({
+          bookmarkId: this.id,
+          undoAction: "removeBookmark",
+          snackbarText: `Bookmark added: ${this.item.fullName}`
+        });
+        this.$store.commit("addBookmark", { bookmarkId: this.id });
+      }
     }
   }
 };

@@ -1,21 +1,15 @@
 <template>
   <v-container>
     <ViewHeading heading="Bookmarks" />
-    <div>
-      <v-row>
-        <v-col v-for="id in bookmarkIds" :key="id" cols="12">
-          <RepoCard :id="id" />
-        </v-col>
-      </v-row>
-    </div>
+    <RepoCardList :repoIds="bookmarkIds" />
   </v-container>
 </template>
 
 <script>
 import ViewHeading from "@/components/ViewHeading.vue";
-import RepoCard from "@/components/RepoCard.vue";
+import RepoCardList from "@/components/RepoCardList.vue";
 export default {
-  components: { ViewHeading, RepoCard },
+  components: { ViewHeading, RepoCardList },
   computed: {
     bookmarkIds() {
       return this.$store.getters.bookmarkIds;
