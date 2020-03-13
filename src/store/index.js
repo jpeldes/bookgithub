@@ -25,6 +25,16 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    updateRepoReadme(state, payload) {
+      let { readmeHtml, repoId } = payload;
+
+      let repo = state.repos.byId[repoId];
+      if (repo) {
+        repo.readmeHtml = readmeHtml;
+      }
+
+      state.repos.byId[repoId] = repo;
+    },
     clearSearchResults(state) {
       state.search.resultIds = [];
     },
@@ -83,7 +93,9 @@ export default new Vuex.Store({
               ids,
               items
             });
-            commit("hasSearchFoundZero", { hasSearchFoundZero: ids.length === 0 });
+            commit("hasSearchFoundZero", {
+              hasSearchFoundZero: ids.length === 0
+            });
           } else {
             // Avoid query mismatch
             // Better to cancel API call, though.

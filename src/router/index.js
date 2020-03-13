@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import SearchView from '@/views/SearchView.vue'
 import BookmarkView from '@/views/BookmarkView.vue'
+import RepoView from '@/views/RepoView.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,11 @@ const routes = [
     path: '/bookmarks',
     name: 'Bookmarks',
     component: BookmarkView
+  },
+  {
+    path: '/repo/:id',
+    name: 'RepoView',
+    component: RepoView
   }
 ]
 

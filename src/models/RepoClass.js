@@ -12,6 +12,8 @@ class RepoClass {
 
     this.authorName = owner.login;
     this.authorAvatarUrl = owner.avatar_url;
+
+    this.readmeHtml = "";
   }
 }
 

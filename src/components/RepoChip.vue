@@ -12,6 +12,7 @@
 
 <script>
 export default {
+  name: "RepoChip",
   props: ["color", "icon", "count", "tooltip"]
 };
 </script>

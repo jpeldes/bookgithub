@@ -35,6 +35,9 @@
         :tooltip="`Forked ${item.forksCount} times`"
       />
     </v-card-actions>
+    <v-card-actions>
+      <v-btn color="primary" text :to="repoDetailsPath">SHOW DETAILS&nbsp;<v-icon right>mdi-arrow-right</v-icon></v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -47,6 +50,9 @@ export default {
     RepoChip
   },
   computed: {
+    repoDetailsPath() {
+      return '/repo/' + this.id;
+    },
     isBookmarked() {
       return this.$store.getters.isBookmarked(this.id);
     },
