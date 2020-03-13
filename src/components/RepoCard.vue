@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-list-item three-line>
+    <v-list-item two-line>
       <v-list-item-avatar>
         <v-img :src="item.authorAvatarUrl" />
       </v-list-item-avatar>
@@ -15,9 +15,7 @@
           <template v-slot:activator="{ on }">
             <v-btn
               v-on="on"
-              text
-              icon
-              rounded
+              fab
               :color="actionBtnColor"
               @click="onClickBookmarkAction"
             >
@@ -61,10 +59,10 @@ export default {
       return this.$store.getters.getRepoById(this.id);
     },
     actionBtnIcon() {
-      return !this.isBookmarked ? "mdi-bookmark-plus" : "mdi-bookmark-remove";
+      return !this.isBookmarked ? "mdi-bookmark" : "mdi-bookmark";
     },
     actionBtnColor() {
-      return !this.isBookmarked ? "info" : "error";
+      return !this.isBookmarked ? "" : "primary";
     }
   },
   methods: {
