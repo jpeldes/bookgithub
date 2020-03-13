@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+import Home from '@/views/Home.vue'
+import SearchView from '@/views/SearchView.vue'
+import BookmarkView from '@/views/BookmarkView.vue'
 
 Vue.use(VueRouter)
 
@@ -9,6 +12,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: SearchView
+  },
+  {
+    path: '/bookmarks',
+    name: 'Bookmarks',
+    component: BookmarkView
   }
 ]
 
