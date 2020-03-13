@@ -15,14 +15,21 @@
       label="Search"
     />
     <v-spacer />
-    <v-btn icon x-large to="/bookmarks" class="ml-2">
-      <v-icon>mdi-bookmark</v-icon>
+    <v-btn icon to="/bookmarks" class="ml-2 mr-2">
+      <v-badge color="blue" :content="bookmarkCount" :value="bookmarkCount">
+        <v-icon>mdi-bookmark</v-icon>
+      </v-badge>
     </v-btn>
   </v-app-bar>
 </template>
 <script>
 import router from "@/router";
 export default {
+  computed: {
+    bookmarkCount() {
+      return this.$store.getters.bookmarkCount;
+    }
+  },
   methods: {
     onSearchFocus: () => {
       router.push("/search").catch(() => {});
