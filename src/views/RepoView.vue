@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-banner>
+    <v-sheet>
       <v-row>
         <v-col class="flex-grow-0">
           <v-avatar size="80" left>
@@ -13,10 +13,10 @@
           <div v-if="!item.description" class="subtitle-1 italic">No description available.</div>
         </v-col>
         <v-col class="flex-grow-0">
-          <RepoBookmarkBtn :id="$route.params.id" />
+          <RepoBookmarkBtn :id="id" />
         </v-col>
       </v-row>
-    </v-banner>
+    </v-sheet>
     <v-row class="mt-3">
       <v-col>
         <RepoChip
@@ -65,13 +65,17 @@ export default {
     RepoChip
   },
   computed: {
+    id: function() {
+      return parseInt(this.$route.params.id);
+    },
     item: function() {
       this.syncReadmeOnce();
-      return this.$store.getters.getRepoById(this.$route.params.id);
+      return this.$store.getters.getRepoById(this.id);
     }
   },
   created: function() {
     this.syncReadmeOnce = _.once(function() {
+      let repoId = this.id;
       if (this.item.readmeHtml) {
         // Dont sync
         this.readmeHtml = this.item.readmeHtml;
@@ -84,7 +88,7 @@ export default {
           return api.parseMarkdown(encodedText).then(html => {
             this.$store.commit("updateRepoReadme", {
               readmeHtml: html,
-              repoId: this.$route.params.id
+              repoId
             });
             this.readmeHtml = html;
           });
